@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Map with Incident Points</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 500px;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Incident Map</h2>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Initialize map
+        var map = L.map('map').setView([20, 0], 2); // Centered on the world
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Function to add incident points with details
+        function addPoint(lat, lng, name, date, description, newsLink) {
+            var popupContent = `
+                <strong>${name}</strong><br>
+                <em>${date}</em><br>
+                ${description}<br>
+                <a href="${newsLink}" target="_blank">Read more</a>
+            `;
+            L.marker([lat, lng]).addTo(map).bindPopup(popupContent);
+        }
+
+        // Sample incidents
+        var incidents = [
+            {
+                lat: 51.5074, lng: -0.1278,
+                name: "Protest in London",
+                date: "2025-02-25",
+                description: "A large protest took place in central London.",
+                newsLink: "https://example.com/london-protest"
+            },
+            {
+                lat: 40.7128, lng: -74.0060,
+                name: "New York Blackout",
+                date: "2025-02-20",
+                description: "A power outage affected thousands in NYC.",
+                newsLink: "https://example.com/nyc-blackout"
+            },
+            {
+                lat: 35.6895, lng: 139.6917,
+                name: "Tokyo Earthquake",
+                date: "2025-02-15",
+                description: "A magnitude 6.2 earthquake hit Tokyo.",
+                newsLink: "https://example.com/tokyo-earthquake"
+            }
+        ];
+
+        // Add incidents to the map
+        incidents.forEach(incident => {
+            addPoint(incident.lat, incident.lng, incident.name, incident.date, incident.description, incident.newsLink);
+        });
+
+        // Example: Dynamically adding a new incident after 5 seconds
+        setTimeout(() => {
+            addPoint(48.8566, 2.3522, "Paris Flood", "2025-02-27", "Heavy rains caused flooding in Paris.", "https://example.com/paris-flood");
+        }, 5000);
+  </script>
+
+</body>
+
+</html>
